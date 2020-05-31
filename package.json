@@ -1,7 +1,7 @@
 {
-  "name": "typescript-template",
-  "version": "1.1.0",
-  "main": "dist/bundle.js",
+  "name": "hide-my-name",
+  "version": "1.0.0",
+  "main": "build/index.js",
   "repository": "https://github.com/hi-imcodeman/typescript-template.git",
   "author": "Asraf Ali <asraf.cse@gmail.com>",
   "license": "MIT",
