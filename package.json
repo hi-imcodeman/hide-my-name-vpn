@@ -1,17 +1,17 @@
 {
-  "name": "typescript-template",
-  "version": "1.1.0",
-  "main": "dist/bundle.js",
-  "repository": "https://github.com/hi-imcodeman/typescript-template.git",
+  "name": "hide-my-name-vpn",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "repository": "https://github.com/hi-imcodeman/hide-my-name-vpn",
   "author": "Asraf Ali <asraf.cse@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "compile": "webpack",
     "docs": "typedoc",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint ./src --ext .ts",
+    "gpr-setup": "node ./scripts/setup-gpr.js"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [
@@ -22,14 +22,16 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn coverage"
+      "pre-commit": "lint-staged"
     }
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",
+    "@types/lowdb": "^1.0.9",
+    "@types/node": "^14.0.6",
+    "@types/puppeteer": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^3.0.2",
     "@typescript-eslint/parser": "^3.0.2",
-    "copy-webpack-plugin": "^6.0.1",
     "eslint": "^7.1.0",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
@@ -37,9 +39,44 @@
     "ts-jest": "^26.0.0",
     "ts-loader": "^7.0.4",
     "typedoc": "^0.17.7",
-    "typescript": "^3.9.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "typescript": "^3.9.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "https-proxy-agent": "^5.0.0",
+    "lodash": "^4.17.15",
+    "lowdb": "^1.0.0",
+    "puppeteer": "^3.2.0",
+    "uuid": "^8.1.0"
+  },
+  "keywords": [
+    "proxy",
+    "proxy server",
+    "free proxy",
+    "free proxy server",
+    "hide my name",
+    "hide my name vpn",
+    "hidemyname",
+    "hidemynamevpn",
+    "vpn",
+    "free vpn",
+    "data",
+    "crawler",
+    "harvesting",
+    "scraping",
+    "scraper",
+    "host",
+    "port",
+    "ip",
+    "ip rotation",
+    "proxy rotation",
+    "online shopping",
+    "ecommerce",
+    "nodejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/hi-imcodeman/hide-my-name-vpn/issues"
+  },
+  "homepage": "https://hi-imcodeman.github.io/hide-my-name-vpn"
 }
