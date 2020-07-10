@@ -65,23 +65,28 @@ describe('class: HideMyNameVPN', () => {
     }
     test('getProxyListFromAPI', async (done) => {
         const proxy = await hideMyName.getProxyListFromAPI(Number(process.env.HIDE_MY_NAME_VPN_CODE));
-        console.log(proxy);
+        expect(proxy.length).toBeGreaterThan(100)
         done()
     })
-    test.skip('getProxyList', async (done) => {
+    test.skip('Should return "Code not found" for invalid code', async (done) => {
+        const proxy = await hideMyName.getProxyListFromAPI(Number('4872862864824628482'));
+        expect(proxy).toBe('Code not found')
+        done()
+    })
+    test('getProxyList', async (done) => {
         const proxy = await hideMyName.getProxyList({
             type: [ProxyType.HTTP],
             maxDelay: 1000
         });
-        console.log(proxy);
+        expect(proxy.length).toBeGreaterThan(100)
         done()
     })
-    test.skip('getRandomProxy()', async (done) => {
+    test('getRandomProxy()', async (done) => {
         const proxy = await hideMyName.getRandomProxy({
             type: [ProxyType.HTTPS],
             maxDelay: 1000
         });
-        console.log(proxy);
+        expect(proxy.delay).toBeLessThanOrEqual(1000)
         done()
     })
     test.skip('test proxies()', async (done) => {

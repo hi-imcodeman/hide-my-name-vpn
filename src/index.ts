@@ -4,7 +4,7 @@ import { v5 as uuid5 } from 'uuid'
 import lowdbFileSync from 'lowdb/adapters/FileSync'
 import cheerio from 'cheerio'
 import _ from 'lodash'
-
+const IS_HEADLESS_MODE = true
 export const sleep = (ms: number) => {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -116,20 +116,22 @@ export default class HideMyNameVPN {
     }
     private _filterProxies(options?: QueryOptions): any[] {
         let proxies = this._db.get('proxyList').filter(obj => obj.status != 'inactive').value()
-        if (options.maxDelay)
-            proxies = _.filter(proxies, obj => obj.delay <= options.maxDelay)
-        if (options.ports && options.ports.length)
-            proxies = _.filter(proxies, (obj) => options.ports.includes(obj.port))
-        if (options.anonymity && options.anonymity.length) {
-            proxies = _.filter(proxies, (obj) => {
-                return options.anonymity.includes(anonymityMapping[obj.anonymity])
-            })
-        }
-        if (options.type && options.type.length) {
-            proxies = _.filter(proxies, obj => {
-                const filtered = obj.type.split(', ').filter(item => options.type.includes(proxyTypeMapping[item]))
-                return filtered.length
-            })
+        if (options) {
+            if (options.maxDelay)
+                proxies = _.filter(proxies, obj => obj.delay <= options.maxDelay)
+            if (options.ports && options.ports.length)
+                proxies = _.filter(proxies, (obj) => options.ports.includes(obj.port))
+            if (options.anonymity && options.anonymity.length) {
+                proxies = _.filter(proxies, (obj) => {
+                    return options.anonymity.includes(anonymityMapping[obj.anonymity])
+                })
+            }
+            if (options.type && options.type.length) {
+                proxies = _.filter(proxies, obj => {
+                    const filtered = obj.type.split(', ').filter(item => options.type.includes(proxyTypeMapping[item]))
+                    return filtered.length
+                })
+            }
         }
 
         return proxies
@@ -219,14 +221,14 @@ export default class HideMyNameVPN {
         }
         return queryParams.join('&')
     }
-    async getProxyList(options?: QueryOptions) {
+    async getProxyList(options?: QueryOptions): Promise<any[]> {
         let browser: puppeteer.Browser
-        const proxyList: any = []
+        const proxyList: any[] = []
         let pageCount = 0
         let proxyCount = 0
         const pageLimit = 50
         try {
-            browser = await puppeteer.launch({ headless: true });
+            browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
             const page = await browser.newPage();
             const queryString = this._buildQueryString(options)
             let rowCount = 0
@@ -238,7 +240,7 @@ export default class HideMyNameVPN {
                 const $ = cheerio.load(proxyTable)
                 const allTableRows = $('table tbody tr')
                 rowCount = allTableRows.length
-                allTableRows.each((_: number, elem: any) => {
+                allTableRows.each((_index: number, elem: any) => {
                     const children = $(elem).children()
                     const ip = $(children[0]).text()
                     const port = Number($(children[1]).text())
@@ -256,7 +258,7 @@ export default class HideMyNameVPN {
                 pageCount++
             } while (rowCount);
             await browser.close()
-            return Promise.resolve(proxyCount)
+            return Promise.resolve(proxyList)
         } catch (error) {
             browser.close()
             return Promise.reject(error)
@@ -267,14 +269,14 @@ export default class HideMyNameVPN {
      */
     async getProxyListFromAPI(code: number): Promise<any> {
         try {
-            const browser = await puppeteer.launch({ headless: true });
+            const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
             const page = await browser.newPage();
-            const response = await page.goto(`${this._baseUrl}/api/proxylist.txt?out=js&lang=en`, { waitUntil: 'load' });
+            let response = await page.goto(`${this._baseUrl}/api/proxylist.txt?out=js&lang=en`, { waitUntil: 'load' });
             let content = await response?.text()
             if (content && content?.indexOf('submit') > -1) {
                 await page.type('body > form > input[type=text]:nth-child(1)', code.toString())
                 await page.click('body > form > input[type=submit]:nth-child(2)')
-                const response = await page.waitForNavigation({ waitUntil: 'networkidle0' })
+                response = await page.waitForNavigation({ waitUntil: 'networkidle0' })
                 content = await response?.text()
                 if (content.indexOf('error')) {
                     const error = await page.$eval('#message > div > div > p', elem => elem.innerHTML)
