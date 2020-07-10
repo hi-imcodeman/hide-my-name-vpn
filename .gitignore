@@ -110,4 +110,4 @@ build/
 .DS_Store
 
 # LowDB json file
-db.json
+proxyDb.json

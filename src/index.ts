@@ -62,7 +62,7 @@ export default class HideMyNameVPN {
     private _db: any
 
     constructor() {
-        const adapter = new lowdbFileSync('db.json')
+        const adapter = new lowdbFileSync('proxyDb.json')
         this._db = lowdb(adapter)
         this._db.defaults({ proxyList: [], metadata: {} })
             .write()
@@ -222,20 +222,28 @@ export default class HideMyNameVPN {
         return queryParams.join('&')
     }
     async getProxyList(options?: QueryOptions): Promise<any[]> {
-        let browser: puppeteer.Browser
         const proxyList: any[] = []
         let pageCount = 0
         let proxyCount = 0
         const pageLimit = 50
+        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
+        const [page] = await browser.pages()
+        await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36')
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+            if (['image', 'stylesheet', 'font', 'script'].indexOf(request.resourceType()) !== -1) {
+                request.abort();
+            } else {
+                request.continue();
+            }
+        });
         try {
-            browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
-            const page = await browser.newPage();
             const queryString = this._buildQueryString(options)
             let rowCount = 0
             do {
                 const start = pageCount * pageLimit
-                await page.goto(`${this._baseUrl}/en/proxy-list/?start=${start}${queryString ? '&' + queryString : ''}`, { waitUntil: 'networkidle0' });
-                await page.waitFor('div.services_proxylist.services > div > div.table_block', { timeout: 60000 })
+                await page.goto(`${this._baseUrl}/en/proxy-list/?start=${start}${queryString ? '&' + queryString : ''}#list`, { waitUntil: 'domcontentloaded' });
+                await page.waitFor('div.services_proxylist.services > div > div.table_block')
                 const proxyTable = await page.$eval('div.services_proxylist.services > div > div.table_block', elem => elem.outerHTML)
                 const $ = cheerio.load(proxyTable)
                 const allTableRows = $('table tbody tr')
