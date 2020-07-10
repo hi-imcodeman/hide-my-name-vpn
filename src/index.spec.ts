@@ -73,7 +73,7 @@ describe('class: HideMyNameVPN', () => {
         expect(proxy).toBe('Code not found')
         done()
     })
-    test('getProxyList', async (done) => {
+    test.skip('getProxyList', async (done) => {
         const proxy = await hideMyName.getProxyList({
             type: [ProxyType.HTTP],
             maxDelay: 1000
@@ -81,7 +81,7 @@ describe('class: HideMyNameVPN', () => {
         expect(proxy.length).toBeGreaterThan(100)
         done()
     })
-    test('getRandomProxy()', async (done) => {
+    test.skip('getRandomProxy()', async (done) => {
         const proxy = await hideMyName.getRandomProxy({
             type: [ProxyType.HTTPS],
             maxDelay: 1000

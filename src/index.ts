@@ -276,16 +276,29 @@ export default class HideMyNameVPN {
      * 
      */
     async getProxyListFromAPI(code: number): Promise<any> {
+        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
+        const [page] = await browser.pages()
+        await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36')
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+            if (['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1) {
+                request.abort();
+            } else {
+                request.continue();
+            }
+        });
         try {
-            const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
-            const page = await browser.newPage();
-            let response = await page.goto(`${this._baseUrl}/api/proxylist.txt?out=js&lang=en`, { waitUntil: 'load' });
+            let response = await page.goto(`${this._baseUrl}/api/proxylist.txt?out=js&lang=en`, { waitUntil: 'domcontentloaded' });
             let content = await response?.text()
             if (content && content?.indexOf('submit') > -1) {
                 await page.type('body > form > input[type=text]:nth-child(1)', code.toString())
                 await page.click('body > form > input[type=submit]:nth-child(2)')
-                response = await page.waitForNavigation({ waitUntil: 'networkidle0' })
+                response = await page.waitForNavigation({ waitUntil: 'domcontentloaded' })
                 content = await response?.text()
+                if (content.indexOf('cloudflare') >= 0) {
+                    await page.waitForNavigation({ timeout: 10000 })
+                    content = await page.content()
+                }
                 if (content.indexOf('error')) {
                     const error = await page.$eval('#message > div > div > p', elem => elem.innerHTML)
                     await browser.close()
