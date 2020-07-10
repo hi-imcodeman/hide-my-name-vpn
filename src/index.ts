@@ -4,7 +4,14 @@ import { v5 as uuid5 } from 'uuid'
 import lowdbFileSync from 'lowdb/adapters/FileSync'
 import cheerio from 'cheerio'
 import _ from 'lodash'
+/**
+ * @internal
+ */
 const IS_HEADLESS_MODE = true
+
+/**
+ * @internal
+ */
 export const sleep = (ms: number) => {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -18,6 +25,9 @@ export enum ProxyType {
     SOCKS4 = 4,
     SOCKS5 = 5
 }
+/**
+ * @internal
+ */
 const proxyTypeMapping = {
     'HTTP': 'h',
     'HTTPS': 's',
@@ -30,12 +40,18 @@ export enum Anonymity {
     Average,
     High
 }
+/**
+ * @internal
+ */
 const anonymityMapping = {
     'no': 1,
     'Low': 2,
     'Average': 3,
     'High': 4
 }
+/**
+ * List of query options to find the list of required proxy servers
+ */
 interface QueryOptions {
     type?: ProxyType[]
     anonymity?: Anonymity[]
@@ -67,6 +83,9 @@ export default class HideMyNameVPN {
         this._db.defaults({ proxyList: [], metadata: {} })
             .write()
     }
+    /**
+     * @internal
+     */
     private _storeToDb(proxyList: any, isPremium = false): void {
         proxyList.map((proxy: any) => {
             if (isPremium)
@@ -104,6 +123,10 @@ export default class HideMyNameVPN {
         this._db.set('metadata.count', totalProxys.length).write()
         this._db.set('metadata.updatedOn', new Date().toISOString()).write()
     }
+    /**
+     * 
+     * @param options 
+     */
     async getRandomProxy(options?: QueryOptions): Promise<any> {
         let proxies = this._filterProxies(options)
         if (!proxies.length) {
@@ -114,6 +137,9 @@ export default class HideMyNameVPN {
             return Promise.resolve(proxies[_.random(proxies.length)] || null)
         }
     }
+    /**
+     * @internal
+     */
     private _filterProxies(options?: QueryOptions): any[] {
         let proxies = this._db.get('proxyList').filter(obj => obj.status != 'inactive').value()
         if (options) {
@@ -136,6 +162,10 @@ export default class HideMyNameVPN {
 
         return proxies
     }
+    /**
+     * 
+     * @param details 
+     */
     updateProxyPerformance(details: ProxyPerformanceDetails) {
         const { host, port, statusCode, statusText, responseTime, errorCode, errorMessage } = details
         const proxyDetails = this._db.get('proxyList').find({ host, port }).value()
@@ -221,6 +251,10 @@ export default class HideMyNameVPN {
         }
         return queryParams.join('&')
     }
+    /**
+     * 
+     * @param options 
+     */
     async getProxyList(options?: QueryOptions): Promise<any[]> {
         const proxyList: any[] = []
         let pageCount = 0
@@ -274,6 +308,7 @@ export default class HideMyNameVPN {
     }
     /**
      * 
+     * @param code 
      */
     async getProxyListFromAPI(code: number): Promise<any> {
         const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
