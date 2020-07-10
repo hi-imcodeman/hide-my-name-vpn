@@ -235,7 +235,7 @@ export default class HideMyNameVPN {
             do {
                 const start = pageCount * pageLimit
                 await page.goto(`${this._baseUrl}/en/proxy-list/?start=${start}${queryString ? '&' + queryString : ''}`, { waitUntil: 'networkidle0' });
-                await page.waitFor('div.services_proxylist.services > div > div.table_block', { timeout: 30000 })
+                await page.waitFor('div.services_proxylist.services > div > div.table_block', { timeout: 60000 })
                 const proxyTable = await page.$eval('div.services_proxylist.services > div > div.table_block', elem => elem.outerHTML)
                 const $ = cheerio.load(proxyTable)
                 const allTableRows = $('table tbody tr')
