@@ -63,12 +63,12 @@ describe('class: HideMyNameVPN', () => {
             console.log('Error Proxy:', proxy);
         }
     }
-    test('Should return "Code not found" for invalid code', async (done) => {
+    test.skip('Should return "Code not found" for invalid code', async (done) => {
         const proxy = await hideMyName.getProxyListFromAPI(Number('4872862864824628482'));
         expect(proxy).toBe('Code not found')
         done()
     })
-    test('getProxyListFromAPI', async (done) => {
+    test.skip('getProxyListFromAPI', async (done) => {
         const proxy = await hideMyName.getProxyListFromAPI(Number(process.env.HIDE_MY_NAME_VPN_CODE));
         expect(proxy.length).toBeGreaterThan(100)
         done()
