@@ -1,8 +1,8 @@
 {
-  "name": "hide-my-name",
+  "name": "hide-my-name-vpn",
   "version": "1.0.0",
   "main": "build/index.js",
-  "repository": "https://github.com/hi-imcodeman/typescript-template.git",
+  "repository": "https://github.com/hi-imcodeman/hide-my-name-vpn",
   "author": "Asraf Ali <asraf.cse@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,8 @@
     "docs": "typedoc",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint": "eslint ./src --ext .ts"
+    "lint": "eslint ./src --ext .ts",
+    "gpr-setup": "node ./scripts/setup-gpr.js"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [
@@ -48,5 +49,34 @@
     "lowdb": "^1.0.0",
     "puppeteer": "^3.2.0",
     "uuid": "^8.1.0"
-  }
+  },
+  "keywords": [
+    "proxy",
+    "proxy server",
+    "free proxy",
+    "free proxy server",
+    "hide my name",
+    "hide my name vpn",
+    "hidemyname",
+    "hidemynamevpn",
+    "vpn",
+    "free vpn",
+    "data",
+    "crawler",
+    "harvesting",
+    "scraping",
+    "scraper",
+    "host",
+    "port",
+    "ip",
+    "ip rotation",
+    "proxy rotation",
+    "online shopping",
+    "ecommerce",
+    "nodejs"
+  ],
+  "bugs": {
+    "url": "https://github.com/hi-imcodeman/hide-my-name-vpn/issues"
+  },
+  "homepage": "https://hi-imcodeman.github.io/hide-my-name-vpn"
 }
