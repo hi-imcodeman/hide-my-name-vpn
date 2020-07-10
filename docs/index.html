@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>hide-my-name - v1.0.0</title>
-	<meta name="description" content="Documentation for hide-my-name - v1.0.0">
+	<title>hide-my-name-vpn - v1.0.0</title>
+	<meta name="description" content="Documentation for hide-my-name-vpn - v1.0.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">hide-my-name - v1.0.0</a>
+					<a href="index.html" class="title">hide-my-name-vpn - v1.0.0</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>hide-my-name - v1.0.0</h1>
+			<h1>hide-my-name-vpn - v1.0.0</h1>
 		</div>
 	</div>
 </header>
@@ -62,17 +62,34 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#typescript-template" id="typescript-template" style="color: inherit; text-decoration: none;">
-					<h1>Typescript Template</h1>
+				<p><a href="https://nodei.co/npm/hide-my-name-vpn/"><img src="https://nodei.co/npm/hide-my-name-vpn.png" alt="NPM"></a></p>
+				<a href="#hidemynamevpn-" id="hidemynamevpn-" style="color: inherit; text-decoration: none;">
+					<h1>HideMyNameVPN <img src="https://github.com/hi-imcodeman/hide-my-name-vpn/workflows/CI/badge.svg" alt=""></h1>
 				</a>
-				<p>This is the template repo of typescript project.</p>
-				<p>Download this repo and start using it as base template of your project.</p>
-				<p>Pre-installed and confiured with followings:</p>
-				<ul>
-					<li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-					<li><a href="https://jestjs.io/">Jest</a></li>
-					<li><a href="https://webpack.js.org/">Webpack</a></li>
-				</ul>
+				<p>This package will give list of free proxy servers.</p>
+				<p>Please refer <a href="https://hi-imcodeman.github.io/hide-my-name-vpn">API Documentation</a> here.</p>
+				<p>See the <a href="https://github.com/hi-imcodeman/hide-my-name-vpn/tree/master/examples">Examples</a> here</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p>Install using &#39;npm&#39;</p>
+				<pre><code class="language-sh">npm i hide-my-name-vpn</code></pre>
+				<p>Install using &#39;yarn&#39;</p>
+				<pre><code class="language-sh">yarn add hide-my-name-vpn</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> HideMyNameVPN <span class="hljs-keyword">from</span> <span class="hljs-string">"hide-my-name-vpn"</span>;
+
+<span class="hljs-keyword">const</span> hideMyName = <span class="hljs-keyword">new</span> HideMyNameVPN();
+
+<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">await</span> hideMyName.getRandomProxy({
+    <span class="hljs-attr">maxDelay</span>: <span class="hljs-number">1000</span>,
+  });
+
+  <span class="hljs-built_in">console</span>.log(proxy);
+})();</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -99,21 +116,6 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/queryoptions.html" class="tsd-kind-icon">Query<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#httpsproxyagent" class="tsd-kind-icon">Https<wbr>Proxy<wbr>Agent</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#is_headless_mode" class="tsd-kind-icon">IS_<wbr>HEADLESS_<wbr>MODE</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#sleep" class="tsd-kind-icon">sleep</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#anonymitymapping" class="tsd-kind-icon">anonymity<wbr>Mapping</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#proxytypemapping" class="tsd-kind-icon">proxy<wbr>Type<wbr>Mapping</a>
 					</li>
 				</ul>
 			</nav>
