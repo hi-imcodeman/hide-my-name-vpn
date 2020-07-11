@@ -1,6 +1,6 @@
 {
   "name": "hide-my-name-vpn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "build/index.js",
   "repository": "https://github.com/hi-imcodeman/hide-my-name-vpn",
   "author": "Asraf Ali <asraf.cse@gmail.com>",
