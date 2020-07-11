@@ -260,7 +260,7 @@ export default class HideMyNameVPN {
         let pageCount = 0
         let proxyCount = 0
         const pageLimit = 50
-        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
+        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE, args: ['--no-sandbox'] });
         const [page] = await browser.pages()
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36')
         await page.setRequestInterception(true);
@@ -311,7 +311,7 @@ export default class HideMyNameVPN {
      * @param code 
      */
     async getProxyListFromAPI(code: number): Promise<any> {
-        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE });
+        const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE, args: ['--no-sandbox'] });
         const [page] = await browser.pages()
         await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36')
         await page.setRequestInterception(true);
