@@ -1,4 +1,4 @@
-name: CI
+name: CI on Push
 on: [push]
 jobs:
   build:
