@@ -1,0 +1,22 @@
+name: CI for every 15 mins
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+jobs:
+  build:
+    name: Test & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install dependencies
+        run: yarn
+      - name: Test Package
+        env:
+          HIDE_MY_NAME_VPN_CODE: ${{ secrets.HIDE_MY_NAME_VPN_CODE }}
+        run: yarn test
+      - name: Build Package
+        run: yarn build
