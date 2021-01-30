@@ -78,6 +78,7 @@ describe('class: HideMyNameVPN', () => {
             type: [ProxyType.HTTP],
             maxDelay: 1000
         });
+        console.log('proxy.length:', proxy.length);
         expect(proxy.length).toBeGreaterThan(100)
         done()
     })
@@ -86,6 +87,7 @@ describe('class: HideMyNameVPN', () => {
             type: [ProxyType.HTTPS],
             maxDelay: 1000
         });
+        console.log(proxy);
         expect(proxy.delay).toBeLessThanOrEqual(1000)
         done()
     })

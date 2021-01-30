@@ -13,7 +13,7 @@ const IS_HEADLESS_MODE = true
  * @internal
  */
 export const sleep = (ms: number) => {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
         setTimeout(() => {
             resolve()
         }, ms)
@@ -86,10 +86,10 @@ export default class HideMyNameVPN {
     /**
      * @internal
      */
-    private _storeToDb(proxyList: any, isPremium = false): void {
+    private _storeToDb(proxyList: any, isFromApi = false): void {
         proxyList.map((proxy: any) => {
-            if (isPremium)
-                proxy.isPremium = isPremium
+            if (isFromApi)
+                proxy.isFromApi = isFromApi
             if (proxy.anon) {
                 proxy.anonymity = _.findKey(anonymityMapping, value => value === Number(proxy.anon))
                 proxy.anon = undefined
@@ -258,7 +258,6 @@ export default class HideMyNameVPN {
     async getProxyList(options?: QueryOptions): Promise<any[]> {
         const proxyList: any[] = []
         let pageCount = 0
-        let proxyCount = 0
         const pageLimit = 50
         const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE, args: ['--no-sandbox'] });
         const [page] = await browser.pages()
@@ -295,14 +294,18 @@ export default class HideMyNameVPN {
                     const proxyDetail = { host: ip, ip, port, country_name: country, city, delay, type, anonymity, lastUpdate }
                     proxyList.push(proxyDetail)
                     this._storeToDb([proxyDetail])
-                    proxyCount++
                 })
                 pageCount++
             } while (rowCount);
             await browser.close()
             return Promise.resolve(proxyList)
         } catch (error) {
-            browser.close()
+            if (IS_HEADLESS_MODE) {
+                page.content().then(async (errorContent) => {
+                    console.log('Error Content:', errorContent);
+                    await browser.close()
+                })
+            }
             return Promise.reject(error)
         }
     }
@@ -352,6 +355,12 @@ export default class HideMyNameVPN {
                 return Promise.resolve(json)
             }
         } catch (error) {
+            if (IS_HEADLESS_MODE) {
+                page.content().then(async (errorContent) => {
+                    console.log('Error Content:', errorContent);
+                    await browser.close()
+                })
+            }
             return Promise.reject(error)
         }
     }
