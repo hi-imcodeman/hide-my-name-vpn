@@ -11,13 +11,13 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "eslint ./src --ext .ts",
-    "gpr-setup": "node ./scripts/setup-gpr.js"
+    "gpr-setup": "node ./scripts/setup-gpr.js",
+    "package-upgrade": "yarn upgrade-interactive"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [
       "yarn lint --fix",
-      "git add",
-      "yarn docs"
+      "git add"
     ]
   },
   "husky": {
