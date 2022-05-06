@@ -1,6 +1,7 @@
 {
   "name": "hide-my-name-vpn",
   "version": "1.0.1",
+  "description": "This package will give list of free proxy servers.",
   "main": "build/index.js",
   "repository": "https://github.com/hi-imcodeman/hide-my-name-vpn",
   "author": "Asraf Ali <asraf.cse@gmail.com>",

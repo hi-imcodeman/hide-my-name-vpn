@@ -130,7 +130,7 @@ export default class HideMyNameVPN {
     async getRandomProxy(options?: QueryOptions): Promise<any> {
         let proxies = this._filterProxies(options)
         if (!proxies.length) {
-            await this.getProxyList(options)
+            await this.getProxyList(options,10)
             proxies = this._filterProxies(options)
             return Promise.resolve(proxies[_.random(proxies.length)] || null)
         } else {
@@ -255,9 +255,10 @@ export default class HideMyNameVPN {
      * 
      * @param options 
      */
-    async getProxyList(options?: QueryOptions): Promise<any[]> {
+    async getProxyList(options?: QueryOptions, maxPage = 0): Promise<any[]> {
         const proxyList: any[] = []
         let pageCount = 0
+        let url=''
         const pageLimit = 50
         const browser = await puppeteer.launch({ headless: IS_HEADLESS_MODE, args: ['--no-sandbox'] });
         const [page] = await browser.pages()
@@ -275,11 +276,12 @@ export default class HideMyNameVPN {
             let rowCount = 0
             do {
                 const start = pageCount * pageLimit
-                await page.goto(`${this._baseUrl}/en/proxy-list/?start=${start}${queryString ? '&' + queryString : ''}#list`, { waitUntil: 'domcontentloaded' });
+                url=`${this._baseUrl}/en/proxy-list/?start=${start}${queryString ? '&' + queryString : ''}#list`
+                await page.goto(url, { waitUntil: 'domcontentloaded' });
                 await page.waitFor('div.services_proxylist.services > div > div.table_block')
-                const proxyTable = await page.$eval('div.services_proxylist.services > div > div.table_block', elem => elem.outerHTML)
-                const $ = cheerio.load(proxyTable)
-                const allTableRows = $('table tbody tr')
+                const pageContent= await page.content()
+                const $ = cheerio.load(pageContent)
+                const allTableRows = $('body > div.wrap > div.services_proxylist.services > div > div.table_block > table > tbody > tr')
                 rowCount = allTableRows.length
                 allTableRows.each((_index: number, elem: any) => {
                     const children = $(elem).children()
@@ -296,16 +298,19 @@ export default class HideMyNameVPN {
                     this._storeToDb([proxyDetail])
                 })
                 pageCount++
+                if (maxPage > 0 && maxPage === pageCount)
+                    break
             } while (rowCount);
             await browser.close()
             return Promise.resolve(proxyList)
         } catch (error) {
             if (IS_HEADLESS_MODE) {
-                page.content().then(async (errorContent) => {
-                    console.log('Error Content:', errorContent);
-                    await browser.close()
-                })
+                const errorContent= await page.content()
+                console.log('Error Content:', errorContent);
+                console.log('Error URL:', url); 
+                console.log('Error Message:', error.message); 
             }
+            await browser.close()
             return Promise.reject(error)
         }
     }
